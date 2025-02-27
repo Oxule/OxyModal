@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.useDelayUnmount = useDelayUnmount;
-const react_1 = require("react");
-function useDelayUnmount(isMounted, delayTime) {
-    const [shouldRender, setShouldRender] = (0, react_1.useState)(false);
-    (0, react_1.useEffect)(() => {
+import { useEffect, useState } from "react";
+export function useDelayUnmount(isMounted, delayTime) {
+    const [shouldRender, setShouldRender] = useState(false);
+    useEffect(() => {
         let timeoutId;
         if (isMounted && !shouldRender) {
             setShouldRender(true);

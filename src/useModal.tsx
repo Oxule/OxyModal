@@ -4,7 +4,7 @@ import {useDelayUnmount} from "./useDelayUnmount";
 import type {ModalCollection, ModalContent, ModalCallback, IModalContext} from "./types";
 import React from "react";
 
-const ModalContext = createContext<[ModalCollection, (value: (((prevState: ModalCollection) => ModalCollection) | ModalCollection)) => void] | null>(null);
+const ModalContext = createContext<[ModalCollection, (value: (((prevState: ModalCollection) => ModalCollection) | ModalCollection)) => void]>([{}, ()=>{}]);
 
 function Modal({children, id, canClose, close, closeIcon, opened, animationDelay, onDelete}){
 

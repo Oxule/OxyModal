@@ -6,4 +6,3 @@ export declare function ModalProvider({ children, closeIcon, animationDelay }: {
     animationDelay?: number;
 }): React.JSX.Element;
 export declare function useModal(): IModalContext;
-//# sourceMappingURL=useModal.d.ts.map

@@ -18,4 +18,3 @@ export type ModalCollection = {
     [key: string]: IModalState;
 };
 export {};
-//# sourceMappingURL=types.d.ts.map

@@ -1,22 +1,15 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModalProvider = ModalProvider;
-exports.useModal = useModal;
-const react_1 = require("react");
-const close_svg_1 = __importDefault(require("./media/close.svg"));
-const useDelayUnmount_1 = require("./useDelayUnmount");
-const react_2 = __importDefault(require("react"));
-const ModalContext = (0, react_1.createContext)(null);
+import { cloneElement, createContext, useContext, useEffect, useState } from "react";
+import closeIconDefault from "./media/close.svg";
+import { useDelayUnmount } from "./useDelayUnmount";
+import React from "react";
+const ModalContext = createContext([{}, () => { }]);
 function Modal({ children, id, canClose, close, closeIcon, opened, animationDelay, onDelete }) {
     const handleBackgroundClick = (e) => {
         if (e.target.classList.contains("oxymodal-background")) {
             close();
         }
     };
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         const handleBackButton = (e) => {
             e.preventDefault();
             close();
@@ -26,36 +19,36 @@ function Modal({ children, id, canClose, close, closeIcon, opened, animationDela
             window.removeEventListener("popstate", handleBackButton);
         };
     }, [close]);
-    const shouldRender = (0, useDelayUnmount_1.useDelayUnmount)(opened, animationDelay);
+    const shouldRender = useDelayUnmount(opened, animationDelay);
     const openAnimationPanel = { animation: `oxymodal-panel-open ${animationDelay}ms ease-in` };
     const closeAnimationPanel = { animation: `oxymodal-panel-close ${animationDelay * 1.25}ms ease-in` };
     const panelAnimation = opened ? openAnimationPanel : closeAnimationPanel;
     const openAnimationBackground = { animation: `oxymodal-background-open ${animationDelay}ms ease-in` };
     const closeAnimationBackground = { animation: `oxymodal-background-close ${animationDelay * 1.25}ms ease-in` };
     const backgroundAnimation = opened ? openAnimationBackground : closeAnimationBackground;
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         if (!opened && !shouldRender)
             onDelete(id);
     }, [shouldRender]);
     if (!shouldRender) {
         return;
     }
-    return react_2.default.createElement("div", { className: "oxymodal-background", style: { position: "absolute", width: "100vw", height: "100vh", left: "0", right: "0", top: "0", bottom: "0", ...backgroundAnimation }, onClick: handleBackgroundClick },
-        react_2.default.createElement("div", { className: "oxymodal-panel", style: panelAnimation }, children),
-        canClose && (0, react_1.cloneElement)(closeIcon, {
+    return React.createElement("div", { className: "oxymodal-background", style: { position: "absolute", width: "100vw", height: "100vh", left: "0", right: "0", top: "0", bottom: "0", ...backgroundAnimation }, onClick: handleBackgroundClick },
+        React.createElement("div", { className: "oxymodal-panel", style: panelAnimation }, children),
+        canClose && cloneElement(closeIcon, {
             className: "oxymodal-button-close",
             onClick: () => close(),
             style: { ...backgroundAnimation }
         }));
 }
-function ModalProvider({ children, closeIcon = react_2.default.createElement("img", { src: close_svg_1.default }), animationDelay = 150 }) {
-    const modals = (0, react_1.useState)({});
-    return react_2.default.createElement(ModalContext.Provider, { value: modals },
+export function ModalProvider({ children, closeIcon = React.createElement("img", { src: closeIconDefault }), animationDelay = 150 }) {
+    const modals = useState({});
+    return React.createElement(ModalContext.Provider, { value: modals },
         children,
-        react_2.default.createElement(react_2.default.Fragment, null, Object.entries(modals[0]).map(x => react_2.default.createElement(Modal, { id: x[0], key: x[0], canClose: x[1].canClose, close: x[1].close, closeIcon: closeIcon, opened: x[1].opened, animationDelay: animationDelay, onDelete: x[1].delete }, x[1].content))));
+        React.createElement(React.Fragment, null, Object.entries(modals[0]).map(x => React.createElement(Modal, { id: x[0], key: x[0], canClose: x[1].canClose, close: x[1].close, closeIcon: closeIcon, opened: x[1].opened, animationDelay: animationDelay, onDelete: x[1].delete }, x[1].content))));
 }
-function useModal() {
-    const [modals, setModals] = (0, react_1.useContext)(ModalContext);
+export function useModal() {
+    const [modals, setModals] = useContext(ModalContext);
     function close(id) {
         setModals(x => ({ ...x, [id]: { ...x[id], opened: false } }));
     }

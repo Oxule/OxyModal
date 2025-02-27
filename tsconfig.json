@@ -3,14 +3,14 @@
     "outDir": "dist",
     "rootDir": "src",
     "declaration": true,
-    "declarationMap": true,
     "moduleResolution": "node",
-    "target": "esnext",
-    "module": "commonjs",
+    "target": "es2020",
+    "module": "es2020",
     "strict": false,
     "esModuleInterop": true,
     "jsx": "react",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": [
     "src",
